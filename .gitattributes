@@ -2,3 +2,6 @@
 *.sql linguist-detectable=true
 
 *.ipynb linguist-vendored
+
+*.html linguist-detectable=false
+*.htm linguist-detectable=false
