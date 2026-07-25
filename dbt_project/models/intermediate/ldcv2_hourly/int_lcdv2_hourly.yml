@@ -1,0 +1,410 @@
+version: 2
+
+models:
+  - name: int_lcdv2_hourly
+    description: >
+      "Hourly station observations derived from sub-hourly LCDv2 data, 
+      including correct precipitation extraction and circular wind direction averaging."
+    columns:
+      - name: station
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_station_dim_enriched')
+                field: station
+
+      - name: floored_timestamp
+        description: "Timestamp of the hourly observation floored to the hour."
+        tests:
+          - not_null
+
+      - name: dry_bulb_temp
+        description: >
+          Average dry bulb temperature of intra subhourly records (°F).
+
+      - name: wet_bulb_temp
+        description: >
+          Average wet bulb temperature of intra subhourly records (°F).
+
+      - name: dew_point_temp
+        description: >
+          Average dew point temperature of intra subhourly records (°F).
+
+      - name: relative_humidity
+        description: >
+          Average relative humidity of intra subhourly records (%).
+
+      - name: wind_speed
+        description: >
+          Average wind speed of intra subhourly records (mph).
+
+      - name: wind_direction
+        description: >
+          Average wind direction of intra subhourly records (degrees).
+
+      - name: wind_gust_speed
+        description: >
+          Max wind guest speed of intra subhourly records (mph).
+
+      - name: precipitation
+        description: >
+          Final measurement of intra subhourly records (inches).
+
+      - name: visibility
+        description: >
+          Average visibility of intra subhourly records (miles).
+
+      - name: station_pressure
+        description: >
+          Average station pressure of intra subhourly records (inHg).
+
+      - name: barometric_pressure
+        description: >
+          Average barometric pressure of intra subhourly records (inHg).
+
+
+  - name: int_lcdv2_hourly_weighted
+    description: >
+      Produces tract-level hourly weather by applying normalized station-to-tract
+      seasonal influence weights to LCDv2 hourly observations. Each hourly record
+      is mapped to a meteorological season and joined to the appropriate station
+      weights. Weather variables are aggregated using weighted sums, and wind
+      direction is aggregated using a weighted circular mean. Includes full
+      auditability of contributing stations.
+
+    columns:
+      - name: tract
+        description: >
+          Census tract receiving weighted hourly weather. Each tract has one
+          weighted weather record per hour.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        description: >
+          Hour timestamp of the aggregated weather record. Derived upstream in
+          int_lcdv2_hourly and preserved here without modification.
+        tests:
+          - not_null
+
+      - name: stations_used
+        description: >
+          Array of station identifiers contributing to the tract-season weighting.
+          Provides full auditability and debugging visibility into the weighting
+          process.
+        tests:
+          - not_null
+
+      - name: weighted_dry_bulb_temp
+        description: >
+          Weighted dry bulb temperature for the tract-hour.
+
+      - name: weighted_wet_bulb_temp
+        description: >
+          Weighted wet bulb temperature for the tract-hour.
+
+      - name: weighted_dew_point_temp
+        description: >
+          Weighted dew point temperature for the tract-hour.
+
+      - name: weighted_relative_humidity
+        description: >
+          Weighted relative humidity for the tract-hour.
+
+      - name: weighted_wind_speed
+        description: >
+          Weighted wind speed for the tract-hour.
+
+      - name: weighted_wind_gust_speed
+        description: >
+          Weighted wind gust speed for the tract-hour.
+
+      - name: weighted_precipitation
+        description: >
+          Weighted hourly precipitation for the tract-hour.
+
+      - name: weighted_visibility
+        description: >
+          Weighted visibility for the tract-hour.
+
+      - name: weighted_station_pressure
+        description: >
+          Weighted station pressure for the tract-hour.
+
+      - name: weighted_barometric_pressure
+        description: >
+          Weighted barometric pressure for the tract-hour.
+
+      - name: weighted_wind_direction
+        description: >
+          Weighted circular-mean wind direction for the tract-hour, computed using
+          weighted sine and cosine components.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 360
+
+    tests:
+      - unique:
+          column_name: "tract || '-' || floored_timestamp"
+
+
+  - name: int_lcdv2_hourly_weighted_bucket_00
+    description: "Bucket 00 of tract-level weighted hourly weather."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        tests:
+          - not_null
+
+
+  - name: int_lcdv2_hourly_weighted_bucket_01
+    description: "Bucket 01 of tract-level weighted hourly weather."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        tests:
+          - not_null
+
+
+  - name: int_lcdv2_hourly_weighted_bucket_02
+    description: "Bucket 02 of tract-level weighted hourly weather."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        tests:
+          - not_null
+
+
+  - name: int_lcdv2_hourly_weighted_bucket_03
+    description: "Bucket 03 of tract-level weighted hourly weather."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        tests:
+          - not_null
+
+
+  - name: int_lcdv2_hourly_weighted_bucket_04
+    description: "Bucket 04 of tract-level weighted hourly weather."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        tests:
+          - not_null
+
+
+  - name: int_lcdv2_hourly_weighted_bucket_05
+    description: "Bucket 05 of tract-level weighted hourly weather."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        tests:
+          - not_null
+
+
+  - name: int_lcdv2_hourly_weighted_bucket_06
+    description: "Bucket 06 of tract-level weighted hourly weather."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        tests:
+          - not_null
+
+
+  - name: int_lcdv2_hourly_weighted_bucket_07
+    description: "Bucket 07 of tract-level weighted hourly weather."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        tests:
+          - not_null
+
+
+  - name: int_lcdv2_hourly_weighted_bucket_08
+    description: "Bucket 08 of tract-level weighted hourly weather."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        tests:
+          - not_null
+
+
+  - name: int_lcdv2_hourly_weighted_bucket_09
+    description: "Bucket 09 of tract-level weighted hourly weather."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        tests:
+          - not_null
+
+
+  - name: int_lcdv2_hourly_weighted_bucket_10
+    description: "Bucket 10 of tract-level weighted hourly weather."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        tests:
+          - not_null
+
+
+  - name: int_lcdv2_hourly_weighted_bucket_11
+    description: "Bucket 11 of tract-level weighted hourly weather."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        tests:
+          - not_null
+
+
+  - name: int_lcdv2_hourly_weighted_bucket_12
+    description: "Bucket 12 of tract-level weighted hourly weather."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        tests:
+          - not_null
+
+
+  - name: int_lcdv2_hourly_weighted_bucket_13
+    description: "Bucket 13 of tract-level weighted hourly weather."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        tests:
+          - not_null
+
+
+  - name: int_lcdv2_hourly_weighted_bucket_14
+    description: "Bucket 14 of tract-level weighted hourly weather."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        tests:
+          - not_null
+
+
+  - name: int_lcdv2_hourly_weighted_bucket_15
+    description: "Bucket 15 of tract-level weighted hourly weather."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_tract_dim_enriched')
+                field: tract
+
+      - name: floored_timestamp
+        tests:
+          - not_null

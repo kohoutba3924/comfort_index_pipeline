@@ -21,6 +21,7 @@ models:
       all weather variables to US units (°F, mph, inches, miles, inHg)
       while preserving column names. Elevation and distance remain in
       meters elsewhere in the pipeline for weighting calculations.
+      Observations recorded at subhourly intervals.
 
     columns:
       - name: station
@@ -33,60 +34,51 @@ models:
                 field: station
 
       - name: timestamp
-        description: "Timestamp of the hourly observation."
+        description: "Timestamp of the subhourly observation."
         tests:
           - not_null
 
       - name: dry_bulb_temp
         description: >
-          Dry bulb temperature converted from degrees Celsius (degC, tenths)
-          to degrees Fahrenheit (°F).
+          Dry bulb temperature in degrees Fahrenheit (°F).
 
       - name: wet_bulb_temp
         description: >
-          Wet bulb temperature converted from degrees Celsius (degC, tenths)
-          to degrees Fahrenheit (°F).
+          Wet bulb temperature in degrees Fahrenheit (°F).
 
       - name: dew_point_temp
         description: >
-          Dew point temperature converted from degrees Celsius (degC, tenths)
-          to degrees Fahrenheit (°F).
+          Dew point temperature in degrees Fahrenheit (°F).
 
       - name: relative_humidity
         description: "Relative humidity percentage."
 
       - name: wind_speed
         description: >
-          Wind speed converted from meters per second (m/s, tenths)
-          to miles per hour (mph).
+          Wind speed in miles per hour (mph).
 
       - name: wind_direction
         description: "Wind direction in degrees."
 
       - name: wind_gust_speed
         description: >
-          Wind gust speed converted from meters per second (m/s, tenths)
-          to miles per hour (mph).
+          Wind gust speed in miles per hour (mph).
 
       - name: precipitation
         description: >
-          Hourly precipitation converted from millimeters (mm, tenths)
-          to inches.
+          Hourly precipitation in inches.
 
       - name: visibility
         description: >
-          Visibility converted from kilometers (km, thousandths)
-          to miles.
+          Visibility in miles.
 
       - name: station_pressure
         description: >
-          Station pressure converted from hectopascals (hPa, tenths)
-          to inches of mercury (inHg).
+          Station pressure in inches of mercury (inHg).
 
       - name: barometric_pressure
         description: >
-          Barometric pressure converted from hectopascals (hPa, tenths)
-          to inches of mercury (inHg).
+          Barometric pressure in inches of mercury (inHg).
 
 
   - name: stg_lcdv2_station

@@ -1,0 +1,187 @@
+with tiger as (
+    select
+        tract,
+        bbox_minx,
+        bbox_miny,
+        bbox_maxx,
+        bbox_maxy,
+        centroid_lat,
+        centroid_lon,
+        geometry_wkb
+    from {{ ref('stg_tiger_tracts') }}
+),
+
+acs as (
+    select
+        tract,
+        state_fips,
+        county_fips,
+        tract_code,
+        population_total,
+        population_male,
+        population_female,
+        male_65_66,
+        male_67_69,
+        male_70_74,
+        male_75_79,
+        male_80_84,
+        male_85_plus,
+        female_65_66,
+        female_67_69,
+        female_70_74,
+        female_75_79,
+        female_80_84,
+        female_85_plus,
+        male_under_5, 
+        female_under_5,
+        median_age,
+        disability_under_18,
+        disability_18_64,
+        disability_65_plus,
+        edu_high_school,
+        edu_bachelors,
+        edu_masters,
+        edu_professional,
+        edu_doctorate,
+        poverty_universe,
+        poverty_below,
+        median_household_income,
+        labor_force,
+        labor_force_civilian,
+        unemployment_civilian,
+        housing_units,
+        housing_occupied,
+        housing_vacant,
+        median_home_value,
+        median_gross_rent,
+        race_universe,
+        race_white,
+        race_black,
+        race_american_indian,
+        race_asian,
+        race_pacific_islander,
+        race_hispanic,
+        race_other,
+        language_universe,
+        limited_english_5_17,
+        limited_english_18_64,
+        limited_english_65_plus,
+        no_english_5_17,
+        no_english_18_64,
+        no_english_65_plus,
+        vehicle_universe,
+        vehicle_none,
+        housing_structure_universe,
+        housing_1_unit,
+        housing_2_unit,
+        housing_3_4_unit,
+        housing_5_9_unit,
+        housing_10_19_unit,
+        housing_20_49_unit,
+        housing_50_plus_unit,
+        housing_mobile_home
+    from {{ ref('stg_acs_5yr') }}
+),
+
+elev as (
+    select
+        tract,
+        elevation_m
+    from {{ ref('stg_tract_elevation') }}
+)
+
+select
+    tiger.tract,
+    acs.state_fips,
+    acs.county_fips,
+    acs.tract_code,
+    mod(hash(tiger.tract), 16) as tract_bucket,
+    
+    -- demographic fields
+
+    acs.population_total,
+    acs.population_male,
+    acs.population_female,
+    acs.male_65_66,
+    acs.male_67_69,
+    acs.male_70_74,
+    acs.male_75_79,
+    acs.male_80_84,
+    acs.male_85_plus,
+    acs.female_65_66,
+    acs.female_67_69,
+    acs.female_70_74,
+    acs.female_75_79,
+    acs.female_80_84,
+    acs.female_85_plus,
+    acs.male_under_5, 
+    acs.female_under_5,
+    acs.median_age,
+
+    acs.disability_under_18,
+    acs.disability_18_64,
+    acs.disability_65_plus,
+
+    acs.edu_high_school,
+    acs.edu_bachelors,
+    acs.edu_masters,
+    acs.edu_professional,
+    acs.edu_doctorate,
+
+    acs.poverty_universe,
+    acs.poverty_below,
+    acs.median_household_income,
+    acs.labor_force,
+    acs.labor_force_civilian,
+    acs.unemployment_civilian,
+    acs.housing_units,
+    acs.housing_occupied,
+    acs.housing_vacant,
+    acs.median_home_value,
+    acs.median_gross_rent,
+
+    acs.race_universe,
+    acs.race_white,
+    acs.race_black,
+    acs.race_american_indian,
+    acs.race_asian,
+    acs.race_pacific_islander,
+    acs.race_hispanic,
+    acs.race_other,
+
+    acs.language_universe,
+    acs.limited_english_5_17,
+    acs.limited_english_18_64,
+    acs.limited_english_65_plus,
+    acs.no_english_5_17,
+    acs.no_english_18_64,
+    acs.no_english_65_plus,
+
+    acs.vehicle_universe,
+    acs.vehicle_none,
+
+    acs.housing_structure_universe,
+    acs.housing_1_unit,
+    acs.housing_2_unit,
+    acs.housing_3_4_unit,
+    acs.housing_5_9_unit,
+    acs.housing_10_19_unit,
+    acs.housing_20_49_unit,
+    acs.housing_50_plus_unit,
+    acs.housing_mobile_home,
+
+    -- elevation
+    elev.elevation_m,
+
+    -- geospatial fields
+    tiger.centroid_lat,
+    tiger.centroid_lon,
+    tiger.bbox_minx,
+    tiger.bbox_miny,
+    tiger.bbox_maxx,
+    tiger.bbox_maxy,
+    tiger.geometry_wkb
+
+from tiger
+left join acs using (tract)
+left join elev using (tract)

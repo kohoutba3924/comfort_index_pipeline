@@ -22,8 +22,8 @@ __pycache__/
 *.duckdb.wal
 
 # dbt build artifacts
-dbt/target/
-dbt/logs/
+dbt_project/target/
+dbt_project/logs/
 
 # Jupyter checkpoints
 .ipynb_checkpoints/

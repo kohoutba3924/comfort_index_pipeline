@@ -1,6 +1,6 @@
 {% macro haversine_distance(lat1, lon1, lat2, lon2) %}
     (
-        2 * 6371 * asin(
+        2 * 6371000 * asin(
             sqrt(
                 pow(sin(radians({{ lat2 }} - {{ lat1 }}) / 2), 2) +
                 cos(radians({{ lat1 }})) *

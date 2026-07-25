@@ -1,0 +1,263 @@
+version: 2
+
+models:
+  - name: int_station_dim_enriched
+    description: "Enriched station dimension combining metadata and elevation."
+    columns:
+      - name: station
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('stg_lcdv2_station')
+                field: station
+          - relationships:
+              arguments:
+                to: ref('stg_station_elevation')
+                field: station
+
+      - name: name
+
+      - name: latitude
+        tests:
+          - not_null
+
+      - name: longitude
+        tests:
+          - not_null
+
+      - name: elevation_m
+        description: >
+          "Station elevation in meters, sourced from stg_station_elevation. 
+          Replaces elevation from stg_lcdv2_station that is of questionable accuracy."
+        tests:
+          - not_null
+
+      - name: data_coverage
+
+      - name: min_date
+
+      - name: max_date
+
+
+  - name: int_tract_dim_enriched
+    description: "Enriched tract dimension combining geospatial, demographic, and elevation data."
+    columns:
+      - name: tract
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('stg_tiger_tracts')
+                field: tract
+          - relationships:
+              arguments:
+                to: ref('stg_acs_5yr')
+                field: tract
+          - relationships:
+              arguments:
+                to: ref('stg_tract_elevation')
+                field: tract
+
+      - name: state_fips
+
+      - name: county_fips
+
+      - name: tract_code
+
+      - name: tract_bucket
+        description: >
+          "Hashes tract value & assigns the tract to one of 16 buckets (0-15). The tract_bucket value
+          is used for sharded processing of hourly records at a tract-level."
+        tests:
+          - not_null
+
+      # -------------------------
+      # Core Demographics
+      # -------------------------
+      - name: population_total
+
+      - name: population_male
+
+      - name: population_female
+
+      # -------------------------
+      # Demographic Breakdown (65+)
+      # -------------------------
+      - name: male_65_66
+
+      - name: male_67_69
+
+      - name: male_70_74
+
+      - name: male_75_79
+
+      - name: male_80_84
+
+      - name: male_85_plus
+
+      - name: female_65_66
+
+      - name: female_67_69
+
+      - name: female_70_74
+
+      - name: female_75_79
+
+      - name: female_80_84
+
+      - name: female_85_plus
+
+      # -------------------------
+      # Under 5
+      # -------------------------
+      - name: male_under_5
+
+      - name: female_under_5
+
+      # -------------------------
+      # Median Age
+      # -------------------------
+      - name: median_age
+
+      # -------------------------
+      # Disability
+      # -------------------------
+      - name: disability_under_18
+
+      - name: disability_18_64
+
+      - name: disability_65_plus
+
+      # -------------------------
+      # Education
+      # -------------------------
+      - name: edu_high_school
+
+      - name: edu_bachelors
+
+      - name: edu_masters
+
+      - name: edu_professional
+
+      - name: edu_doctorate
+
+      # -------------------------
+      # Socioeconomic Status
+      # -------------------------
+      - name: poverty_universe
+
+      - name: poverty_below
+
+      - name: median_household_income
+
+      - name: labor_force
+
+      - name: labor_force_civilian
+
+      - name: unemployment_civilian
+
+      - name: housing_units
+
+      - name: housing_occupied
+
+      - name: housing_vacant
+
+      - name: median_home_value
+
+      - name: median_gross_rent
+
+      # -------------------------
+      # Minority Status & Language
+      # -------------------------
+      - name: race_universe
+
+      - name: race_white
+
+      - name: race_black
+
+      - name: race_american_indian
+
+      - name: race_asian
+
+      - name: race_pacific_islander
+
+      - name: race_hispanic
+
+      - name: race_other
+
+      - name: language_universe
+
+      - name: limited_english_5_17
+
+      - name: limited_english_18_64
+
+      - name: limited_english_65_plus
+
+      - name: no_english_5_17
+
+      - name: no_english_18_64
+
+      - name: no_english_65_plus
+
+      # -------------------------
+      # Housing & Transportation
+      # -------------------------
+      - name: vehicle_universe
+
+      - name: vehicle_none
+
+      - name: housing_structure_universe
+
+      - name: housing_1_unit
+
+      - name: housing_2_unit
+
+      - name: housing_3_4_unit
+
+      - name: housing_5_9_unit
+
+      - name: housing_10_19_unit
+
+      - name: housing_20_49_unit
+
+      - name: housing_50_plus_unit
+
+      - name: housing_mobile_home
+
+      # -------------------------
+      # Elevation & Geospatial
+      # -------------------------
+
+      - name: elevation_m
+        description: "Tract centroid elevation in meters, sourced from stg_tract_elevation."
+        tests:
+          - not_null
+
+      - name: centroid_lat
+        tests:
+          - not_null
+
+      - name: centroid_lon
+        tests:
+          - not_null
+
+      - name: bbox_minx
+        tests:
+          - not_null
+
+      - name: bbox_miny
+        tests:
+          - not_null
+
+      - name: bbox_maxx
+        tests:
+          - not_null
+
+      - name: bbox_maxy
+        tests:
+          - not_null
+
+      - name: geometry_wkb
