@@ -1,0 +1,350 @@
+version: 2
+
+models:
+
+  # ---------------------------------------------------------------------------
+  # dim_tract
+  # ---------------------------------------------------------------------------
+  - name: dim_tract
+    description: >
+      Tract dimension table containing enriched geospatial and elevation
+      attributes for each census tract. This is the primary reference table
+      for tract-level metadata used across the pipeline.
+    config:
+      tags: ["final", "dimension"]
+    columns:
+      - name: tract
+        description: 11-digit Census Tract GEOID, unique tract identifier.
+      - name: tract_bucket
+        description: Assigned bucket for tract-level partitioning.
+      - name: state_fips
+        description: 2-digit state FIPS code, first component of the GEOID.
+      - name: county_fips
+        description: 3-digit county FIPS code, second component of the GEOID.
+      - name: tract_code
+        description: 6-digit tract code, third component of the GEOID.
+            # -------------------------
+      # Core Demographics
+      # -------------------------
+      - name: population_total
+        description: Total population for the tract.
+      - name: population_male
+        description: Total male population.
+      - name: population_female
+        description: Total female population.
+
+      # -------------------------
+      # Demographic Breakdown (65+)
+      # -------------------------
+      - name: male_65_66
+        description: Male population ages 65-66.
+      - name: male_67_69
+        description: Male population ages 67-69.
+      - name: male_70_74
+        description: Male population ages 70-74.
+      - name: male_75_79
+        description: Male population ages 75-79.
+      - name: male_80_84
+        description: Male population ages 80-84.
+      - name: male_85_plus
+        description: Male population ages 85+.
+      - name: female_65_66
+        description: Female population ages 65-66.
+      - name: female_67_69
+        description: Female population ages 67-69.
+      - name: female_70_74
+        description: Female population ages 70-74.
+      - name: female_75_79
+        description: Female population ages 75-79.
+      - name: female_80_84
+        description: Female population ages 80-84.
+      - name: female_85_plus
+        description: Female population ages 85+.
+
+      # -------------------------
+      # Under 5
+      # -------------------------
+      - name: male_under_5
+        description: Male population under age 5.
+      - name: female_under_5
+        description: Female population under age 5.
+
+      # -------------------------
+      # Median Age
+      # -------------------------
+      - name: median_age
+        description: Median population age.
+
+      # -------------------------
+      # Disability
+      # -------------------------
+      - name: disability_under_18
+        description: Population under 18 with a disability.
+      - name: disability_18_64
+        description: Population ages 18-64 with a disability.
+      - name: disability_65_plus
+        description: Population ages 65+ with a disability.
+
+      # -------------------------
+      # Education
+      # -------------------------
+      - name: edu_high_school
+        description: Population with a high school diploma.
+      - name: edu_bachelors
+        description: Population with a bachelor's degree.
+      - name: edu_masters
+        description: Population with a master's degree.
+      - name: edu_professional
+        description: Population with a professional degree.
+      - name: edu_doctorate
+        description: Population with a doctoral degree.
+
+      # -------------------------
+      # Socioeconomic Status
+      # -------------------------
+      - name: poverty_universe
+        description: Population included in poverty determination.
+      - name: poverty_below
+        description: Population below the poverty line.
+      - name: median_household_income
+        description: Median household income.
+      - name: labor_force
+        description: Total labor force.
+      - name: labor_force_civilian
+        description: Civilian labor force.
+      - name: unemployment_civilian
+        description: Unemployed civilian population.
+      - name: housing_units
+        description: Total housing units.
+      - name: housing_occupied
+        description: Occupied housing units.
+      - name: housing_vacant
+        description: Vacant housing units.
+      - name: median_home_value
+        description: Median home value.
+      - name: median_gross_rent
+        description: Median gross rent.
+
+      # -------------------------
+      # Minority Status & Language
+      # -------------------------
+      - name: race_universe
+        description: Population included in race classification.
+      - name: race_white
+        description: White population.
+      - name: race_black
+        description: Black or African American population.
+      - name: race_american_indian
+        description: American Indian and Alaska Native population.
+      - name: race_asian
+        description: Asian population.
+      - name: race_pacific_islander
+        description: Native Hawaiian and Pacific Islander population.
+      - name: race_hispanic
+        description: Hispanic or Latino population.
+      - name: race_other
+        description: Population identifying as other race.
+      - name: language_universe
+        description: Population included in language proficiency classification.
+      - name: limited_english_5_17
+        description: Population ages 5-17 with limited English proficiency.
+      - name: limited_english_18_64
+        description: Population ages 18-64 with limited English proficiency.
+      - name: limited_english_65_plus
+        description: Population ages 65+ with limited English proficiency.
+      - name: no_english_5_17
+        description: Population ages 5-17 who speak no English.
+      - name: no_english_18_64
+        description: Population ages 18-64 who speak no English.
+      - name: no_english_65_plus
+        description: Population ages 65+ who speak no English.
+
+      # -------------------------
+      # Housing & Transportation
+      # -------------------------
+      - name: vehicle_universe
+        description: Population included in vehicle availability classification.
+      - name: vehicle_none
+        description: Households with no available vehicle.
+      - name: housing_structure_universe
+        description: Universe for housing structure classification.
+      - name: housing_1_unit
+        description: 1-unit detached or attached.
+      - name: housing_2_unit
+        description: 2-unit structures.
+      - name: housing_3_4_unit
+        description: 3-4 unit structures.
+      - name: housing_5_9_unit
+        description: 5-9 unit structures.
+      - name: housing_10_19_unit
+        description: 10-19 unit structures.
+      - name: housing_20_49_unit
+        description: 20-49 unit structures.
+      - name: housing_50_plus_unit
+        description: 50+ unit structures.
+      - name: housing_mobile_home
+        description: Mobile home housing units.
+
+      # -------------------------
+      # Geospatial
+      # -------------------------
+      - name: elevation_m
+        description: Elevation of the tract centroid in meters.        
+      - name: centroid_lat
+        description: Latitude of the tract centroid.
+      - name: centroid_lon
+        description: Longitude of the tract centroid.
+      - name: bbox_minx
+        description: Minimum longitude of the tract bounding box.
+      - name: bbox_maxx
+        description: Maximum longitude of the tract bounding box.
+      - name: bbox_miny
+        description: Minimum latitude of the tract bounding box.
+      - name: bbox_maxy
+        description: Maximum latitude of the tract bounding box.
+      - name: geometry_wkb
+        description: Tract geometry in Well-Known Binary (WKB) format.
+
+  # ---------------------------------------------------------------------------
+  # dim_station
+  # ---------------------------------------------------------------------------
+  - name: dim_station
+    description: >
+      Weather station dimension table containing metadata, coordinates,
+      and elevation for each LCDv2 station. Used for distance, weighting,
+      and wind alignment calculations.
+    config:
+      tags: ["final", "dimension"]
+    columns:
+      - name: station
+        description: WBAN station identifier.
+      - name: name
+        description: Human-readable station name.
+      - name: latitude
+        description: Station latitude.
+      - name: longitude
+        description: Station longitude.
+      - name: elevation_m
+        description: Station elevation in meters.
+      - name: data_coverage
+        description: Coverage score representing completeness of station data.
+      - name: min_date
+        description: Earliest observation date available for the station.
+      - name: max_date
+        description: Latest observation date available for the station.
+
+  # ---------------------------------------------------------------------------
+  # rel_station_weights
+  # ---------------------------------------------------------------------------
+  - name: rel_station_weights
+    description: >
+      Relationship table defining tract-station seasonal weights used to
+      compute weighted hourly weather features. Includes distance factor,
+      wind alignment, elevation penalty, raw weight, and normalized weight.
+    config:
+      tags: ["final", "relationship"]
+    columns:
+      - name: tract
+        description: 11-digit Census Tract GEOID, unique tract identifier.
+      - name: station
+        description: WBAN station identifier.
+      - name: season
+        description: >
+          Meteorological season (DJF, MAM, JJA, SON) used to align climatological
+          prevailing wind direction with tract-level weighting.
+      - name: distance_factor
+        description: >
+          Linear taper factor (0-1) applied only within 50 km. Computed as
+          1 - (distance_m / 50000). Stations beyond 50 km receive a factor of 0.
+      - name: wind_alignment
+        description: >
+          Alignment score (0-1) between seasonal prevailing wind direction and
+          station-to-tract bearing. Higher values indicate stronger directional
+          influence.
+      - name: elevation_penalty
+        description: >
+          Penalty factor (0-1) based on elevation difference between station and
+          tract. Higher penalties reduce influence from stations at mismatched
+          elevations.
+      - name: raw_weight
+        description: >
+          Raw weight computed as (0.6 * distance_factor) + 
+          (0.3 * elevation_penalty) + (0.1 * wind_alignment). 
+          Represents the station's relative influence before normalization.
+      - name: final_weight
+        description: >
+          Normalized station influence weight for the tract-season pair. All
+          weights for a given tract and season sum to 1.
+      - name: stations_used
+        description: >
+          Array of station identifiers contributing to the tract-season weighting.
+          Provides full auditability and debugging visibility into the weighting
+          process.
+
+  # ---------------------------------------------------------------------------
+  # rel_tract_station_distance
+  # ---------------------------------------------------------------------------
+  - name: rel_tract_station_distance
+    description: >
+      Relationship table containing distances, bearings, and elevation
+      differences between each tract and each station. Used as the basis
+      for weighting and fallback logic.
+    config:
+      tags: ["final", "relationship"]
+    columns:
+      - name: tract
+        description: 11-digit Census Tract GEOID, unique tract identifier.
+      - name: station
+        description: WBAN station identifier.
+      - name: distance_m
+        description: > 
+          Haversine distance between the station and tract centroid, expressed in meters. 
+          Represents straight-line geographic separation.
+      - name: bearing_deg
+        description: >
+          Forward azimuth (0-360 degrees) from the station to the tract centroid.
+          Represents the direction of the tract relative to the station.
+      - name: elevation_diff_m
+        description: >
+          Difference in elevation between tract and station (tract_elev - station_elev),
+          expressed in meters.
+
+  # ---------------------------------------------------------------------------
+  # fact_lcdv2_tract_hourly
+  # ---------------------------------------------------------------------------
+  - name: fact_lcdv2_tract_hourly
+    description: >
+      Final tract-level hourly weather fact table produced by applying
+      weighted aggregation across nearby stations. This dataset is the
+      primary input for downstream ML feature engineering.
+    config:
+      tags: ["final", "fact"]
+    columns:
+      - name: tract
+        description: 11-digit Census Tract GEOID, unique tract identifier.
+      - name: floored_timestamp
+        description: Hourly timestamp (floored to the hour).
+      - name: weighted_dry_bulb_temp
+        description: Weighted dry bulb temperature for the tract-hour (°F).
+      - name: weighted_wet_bulb_temp
+        description: Weighted wet bulb temperature for the tract-hour (°F).
+      - name: weighted_dew_point_temp
+        description: Weighted dew point temperature for the tract-hour (°F).
+      - name: weighted_relative_humidity
+        description: Weighted relative humidity for the tract-hour (%).
+      - name: weighted_wind_speed
+        description: Weighted wind speed for the tract-hour (mph).
+      - name: weighted_wind_direction
+        description: Weighted circular-mean wind direction for the tract-hour (degrees). 
+      - name: weighted_wind_gust_speed
+        description: Weighted wind gust speed for the tract-hour (mph).
+      - name: weighted_precipitation
+        description: Weighted hourly precipitation for the tract-hour (inches).
+      - name: weighted_visibility
+        description: Weighted visibility for the tract-hour (miles).
+      - name: weighted_station_pressure
+        description: Weighted station pressure for the tract-hour (inHg).
+      - name: weighted_barometric_pressure
+        description: Weighted barometric pressure for the tract-hour (inHg).
+      - name: stations_used
+        description: Array of stations contributing to the weighted hourly values.

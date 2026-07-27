@@ -12,7 +12,7 @@ models:
     columns:
       - name: station
         description: >
-          Unique identifier for the weather station. Used to join seasonal
+          WBAN station identifier. Used to join seasonal
           prevailing wind direction to geometry and weighting models.
         tests:
           - not_null
@@ -30,7 +30,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['DJF', 'MAM', 'JJA', 'SON']
+              arguments:
+                values: ['DJF', 'MAM', 'JJA', 'SON']
 
       - name: prevailing_wind_direction_deg
         description: >
@@ -43,8 +44,9 @@ models:
           be NULL.
         tests:
           - dbt_expectations.expect_column_values_to_be_between:
-              min_value: 0
-              max_value: 360
+              arguments:
+                min_value: 0
+                max_value: 360
 
     tests:
       - unique:
@@ -60,9 +62,6 @@ models:
 
     columns:
       - name: station
-        description: >
-          Unique identifier for the weather station. Used to join geometry to
-          prevailing wind direction and weighting models.
         tests:
           - not_null
           - relationships:
@@ -71,9 +70,6 @@ models:
                 field: station
 
       - name: tract
-        description: >
-          Unique identifier for the census tract. Used to join geometry to tract-level
-          weighting and final weather aggregation.
         tests:
           - not_null
           - relationships:
@@ -82,28 +78,21 @@ models:
                 field: tract
 
       - name: distance_m
-        description: >
-          Haversine distance between the station and tract centroid, expressed in
-          meters. Represents straight-line geographic separation.
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_between:
-              min_value: 0
+              arguments:
+                min_value: 0
 
       - name: bearing_deg
-        description: >
-          Forward azimuth (0-360 degrees) from the station to the tract centroid.
-          Represents the direction of the tract relative to the station.
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_between:
-              min_value: 0
-              max_value: 360
+              arguments:
+                min_value: 0
+                max_value: 360
 
       - name: elevation_diff_m
-        description: >
-          Difference in elevation between tract and station (tract_elev - station_elev),
-          expressed in meters. Used as a penalty factor in weighting.
         tests:
           - not_null
 
@@ -123,10 +112,6 @@ models:
 
     columns:
       - name: station
-        description: >
-          Identifier of the station contributing to the tract's seasonal weight.
-          Only stations within 50 km of the tract centroid are included, unless
-          fallback logic selects the nearest station.
         tests:
           - not_null
           - relationships:
@@ -135,9 +120,6 @@ models:
                 field: station
 
       - name: tract
-        description: >
-          Census tract receiving weighted station influence. Each tract has one
-          or more contributing stations per season, depending on proximity.
         tests:
           - not_null
           - relationships:
@@ -146,72 +128,53 @@ models:
                 field: tract
 
       - name: season
-        description: >
-          Meteorological season (DJF, MAM, JJA, SON) used to align climatological
-          prevailing wind direction with tract-level weighting.
         tests:
           - not_null
           - accepted_values:
-              values: ['DJF', 'MAM', 'JJA', 'SON']
+              arguments:
+                values: ['DJF', 'MAM', 'JJA', 'SON']
 
       - name: wind_alignment
-        description: >
-          Alignment score (0-1) between seasonal prevailing wind direction and
-          station-to-tract bearing. Higher values indicate stronger directional
-          influence.
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_between:
-              min_value: 0
-              max_value: 1
+              arguments:
+                min_value: 0
+                max_value: 1
 
       - name: elevation_penalty
-        description: >
-          Penalty factor (0-1) based on elevation difference between station and
-          tract. Higher penalties reduce influence from stations at mismatched
-          elevations.
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_between:
-              min_value: 0
-              max_value: 1
+              arguments:
+                min_value: 0
+                max_value: 1
 
       - name: distance_factor
-        description: >
-          Linear taper factor (0-1) applied only within 50 km. Computed as
-          1 - (distance_m / 50000). Stations beyond 50 km receive a factor of 0.
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_between:
-              min_value: 0
-              max_value: 1
+              arguments:
+                min_value: 0
+                max_value: 1
 
       - name: raw_weight
-        description: >
-          Scientifically grounded raw weight computed as (0.6 * distance_factor) + 
-          (0.3 * elevation_penalty) + (0.1 * wind_alignment). 
-          Represents the station's relative influence beforenormalization.
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_between:
-              min_value: 0
-              max_value: 1
+              arguments:
+                min_value: 0
+                max_value: 1
 
       - name: final_weight
-        description: >
-          Normalized station influence weight for the tract-season pair. All
-          weights for a given tract and season sum to 1.
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_between:
-              min_value: 0
-              max_value: 1
+              arguments:
+                min_value: 0
+                max_value: 1
 
       - name: stations_used
-        description: >
-          Array of station identifiers contributing to the tract-season weighting.
-          Provides full auditability and debugging visibility into the weighting
-          process.
         tests:
           - not_null
 

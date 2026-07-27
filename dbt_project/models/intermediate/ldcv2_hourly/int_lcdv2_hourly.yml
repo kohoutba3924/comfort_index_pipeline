@@ -3,7 +3,7 @@ version: 2
 models:
   - name: int_lcdv2_hourly
     description: >
-      "Hourly station observations derived from sub-hourly LCDv2 data, 
+      "Hourly station observations aggregated and extracted from sub-hourly LCDv2 data, 
       including correct precipitation extraction and circular wind direction averaging."
     columns:
       - name: station
@@ -21,47 +21,47 @@ models:
 
       - name: dry_bulb_temp
         description: >
-          Average dry bulb temperature of intra subhourly records (°F).
+          Average dry bulb temperature from among subhourly records (°F).
 
       - name: wet_bulb_temp
         description: >
-          Average wet bulb temperature of intra subhourly records (°F).
+          Average wet bulb temperature from among subhourly records (°F).
 
       - name: dew_point_temp
         description: >
-          Average dew point temperature of intra subhourly records (°F).
+          Average dew point temperature from among subhourly records (°F).
 
       - name: relative_humidity
         description: >
-          Average relative humidity of intra subhourly records (%).
+          Average relative humidity from among subhourly records (%).
 
       - name: wind_speed
         description: >
-          Average wind speed of intra subhourly records (mph).
+          Average wind speed from among subhourly records (mph).
 
       - name: wind_direction
         description: >
-          Average wind direction of intra subhourly records (degrees).
+          Average wind direction from among subhourly records (degrees).
 
       - name: wind_gust_speed
         description: >
-          Max wind guest speed of intra subhourly records (mph).
+          Max wind guest speed from among subhourly records (mph).
 
       - name: precipitation
         description: >
-          Final measurement of intra subhourly records (inches).
+          Final intra-hour measurement from among subhourly records (inches).
 
       - name: visibility
         description: >
-          Average visibility of intra subhourly records (miles).
+          Average visibility from among subhourly records (miles).
 
       - name: station_pressure
         description: >
-          Average station pressure of intra subhourly records (inHg).
+          Average station pressure from among subhourly records (inHg).
 
       - name: barometric_pressure
         description: >
-          Average barometric pressure of intra subhourly records (inHg).
+          Average barometric pressure from among subhourly records (inHg).
 
 
   - name: int_lcdv2_hourly_weighted
@@ -75,9 +75,6 @@ models:
 
     columns:
       - name: tract
-        description: >
-          Census tract receiving weighted hourly weather. Each tract has one
-          weighted weather record per hour.
         tests:
           - not_null
           - relationships:
@@ -86,68 +83,39 @@ models:
                 field: tract
 
       - name: floored_timestamp
-        description: >
-          Hour timestamp of the aggregated weather record. Derived upstream in
-          int_lcdv2_hourly and preserved here without modification.
         tests:
           - not_null
 
       - name: stations_used
-        description: >
-          Array of station identifiers contributing to the tract-season weighting.
-          Provides full auditability and debugging visibility into the weighting
-          process.
         tests:
           - not_null
 
       - name: weighted_dry_bulb_temp
-        description: >
-          Weighted dry bulb temperature for the tract-hour.
 
       - name: weighted_wet_bulb_temp
-        description: >
-          Weighted wet bulb temperature for the tract-hour.
 
       - name: weighted_dew_point_temp
-        description: >
-          Weighted dew point temperature for the tract-hour.
 
       - name: weighted_relative_humidity
-        description: >
-          Weighted relative humidity for the tract-hour.
 
       - name: weighted_wind_speed
-        description: >
-          Weighted wind speed for the tract-hour.
 
       - name: weighted_wind_gust_speed
-        description: >
-          Weighted wind gust speed for the tract-hour.
 
       - name: weighted_precipitation
-        description: >
-          Weighted hourly precipitation for the tract-hour.
 
       - name: weighted_visibility
-        description: >
-          Weighted visibility for the tract-hour.
 
       - name: weighted_station_pressure
-        description: >
-          Weighted station pressure for the tract-hour.
 
       - name: weighted_barometric_pressure
-        description: >
-          Weighted barometric pressure for the tract-hour.
 
       - name: weighted_wind_direction
-        description: >
-          Weighted circular-mean wind direction for the tract-hour, computed using
-          weighted sine and cosine components.
         tests:
           - dbt_expectations.expect_column_values_to_be_between:
-              min_value: 0
-              max_value: 360
+              arguments:
+                min_value: 0
+                max_value: 360
 
     tests:
       - unique:
