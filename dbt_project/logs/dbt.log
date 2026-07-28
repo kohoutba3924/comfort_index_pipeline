@@ -152239,3 +152239,77 @@ KeyboardInterrupt
 
 [0m10:35:20.064113 [debug] [MainThread]: Command `dbt docs serve` failed at 10:35:20.062442 after 68261.33 seconds
 [0m10:35:20.072373 [debug] [MainThread]: Flushing usage events
+[0m19:35:31.872855 [debug] [MainThread]: Got an exception trying to initialize tracking
+
+
+============================== 19:35:32.025896 | fa3a2164-a832-4b3c-be89-1039d71d318d ==============================
+[0m19:35:32.025896 [info ] [MainThread]: Running with dbt=1.11.11
+[0m19:35:32.027673 [debug] [MainThread]: running dbt with arguments {'version_check': 'True', 'no_print': 'None', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'target_path': 'None', 'printer_width': '80', 'write_json': 'True', 'empty': 'None', 'log_cache_events': 'False', 'introspect': 'True', 'cache_selected_only': 'False', 'log_format': 'default', 'debug': 'False', 'fail_fast': 'False', 'profiles_dir': 'C:\\Users\\brett\\.dbt', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'partial_parse': 'True', 'invocation_command': 'dbt docs serve', 'use_colors': 'True', 'indirect_selection': 'eager', 'use_experimental_parser': 'False', 'log_path': 'C:\\Users\\brett\\Projects\\ml_feature_pipeline\\dbt_project\\logs'}
+[0m19:43:10.130147 [error] [MainThread]: Encountered an error:
+
+[0m19:43:10.217306 [error] [MainThread]: Traceback (most recent call last):
+  File "C:\Users\brett\Projects\ml_feature_pipeline\venv_dbt\Lib\site-packages\dbt\cli\requires.py", line 182, in wrapper
+    result, success = func(*args, **kwargs)
+                      ~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\brett\Projects\ml_feature_pipeline\venv_dbt\Lib\site-packages\dbt\cli\requires.py", line 128, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\brett\Projects\ml_feature_pipeline\venv_dbt\Lib\site-packages\dbt\cli\requires.py", line 276, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\brett\Projects\ml_feature_pipeline\venv_dbt\Lib\site-packages\dbt\cli\requires.py", line 321, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\brett\Projects\ml_feature_pipeline\venv_dbt\Lib\site-packages\dbt\cli\requires.py", line 368, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\brett\Projects\ml_feature_pipeline\venv_dbt\Lib\site-packages\dbt\cli\main.py", line 309, in docs_serve
+    results = task.run()
+  File "C:\Users\brett\Projects\ml_feature_pipeline\venv_dbt\Lib\site-packages\dbt\task\docs\serve.py", line 29, in run
+    httpd.serve_forever()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\brett\miniforge3\Lib\socketserver.py", line 235, in serve_forever
+    ready = selector.select(poll_interval)
+  File "C:\Users\brett\miniforge3\Lib\selectors.py", line 314, in select
+    r, w, _ = self._select(self._readers, self._writers, [], timeout)
+              ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\brett\miniforge3\Lib\selectors.py", line 305, in _select
+    r, w, x = select.select(r, w, w, timeout)
+              ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+[0m19:43:10.219191 [debug] [MainThread]: Command `dbt docs serve` failed at 19:43:10.218929 after 458.54 seconds
+[0m19:43:10.219905 [debug] [MainThread]: Flushing usage events
+[0m19:45:43.513001 [debug] [MainThread]: Got an exception trying to initialize tracking
+
+
+============================== 19:45:43.640077 | 82fba8ce-6255-49e0-b2ba-e49dd918f0b5 ==============================
+[0m19:45:43.640077 [info ] [MainThread]: Running with dbt=1.11.11
+[0m19:45:43.641952 [debug] [MainThread]: running dbt with arguments {'version_check': 'True', 'no_print': 'None', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'target_path': 'None', 'printer_width': '80', 'write_json': 'True', 'empty': 'None', 'log_cache_events': 'False', 'introspect': 'True', 'cache_selected_only': 'False', 'fail_fast': 'False', 'debug': 'False', 'log_format': 'default', 'partial_parse': 'True', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'profiles_dir': 'C:\\Users\\brett\\.dbt', 'indirect_selection': 'eager', 'use_colors': 'True', 'invocation_command': 'dbt docs serve', 'use_experimental_parser': 'False', 'log_path': 'C:\\Users\\brett\\Projects\\ml_feature_pipeline\\dbt_project\\logs'}
+[0m19:56:54.553615 [error] [MainThread]: Encountered an error:
+
+[0m19:56:54.562270 [error] [MainThread]: Traceback (most recent call last):
+  File "C:\Users\brett\Projects\ml_feature_pipeline\venv_dbt\Lib\site-packages\dbt\cli\requires.py", line 182, in wrapper
+    result, success = func(*args, **kwargs)
+                      ~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\brett\Projects\ml_feature_pipeline\venv_dbt\Lib\site-packages\dbt\cli\requires.py", line 128, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\brett\Projects\ml_feature_pipeline\venv_dbt\Lib\site-packages\dbt\cli\requires.py", line 276, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\brett\Projects\ml_feature_pipeline\venv_dbt\Lib\site-packages\dbt\cli\requires.py", line 321, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\brett\Projects\ml_feature_pipeline\venv_dbt\Lib\site-packages\dbt\cli\requires.py", line 368, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\brett\Projects\ml_feature_pipeline\venv_dbt\Lib\site-packages\dbt\cli\main.py", line 309, in docs_serve
+    results = task.run()
+  File "C:\Users\brett\Projects\ml_feature_pipeline\venv_dbt\Lib\site-packages\dbt\task\docs\serve.py", line 29, in run
+    httpd.serve_forever()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\brett\miniforge3\Lib\socketserver.py", line 235, in serve_forever
+    ready = selector.select(poll_interval)
+  File "C:\Users\brett\miniforge3\Lib\selectors.py", line 314, in select
+    r, w, _ = self._select(self._readers, self._writers, [], timeout)
+              ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\brett\miniforge3\Lib\selectors.py", line 305, in _select
+    r, w, x = select.select(r, w, w, timeout)
+              ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+[0m19:56:54.564432 [debug] [MainThread]: Command `dbt docs serve` failed at 19:56:54.564137 after 671.15 seconds
+[0m19:56:54.565405 [debug] [MainThread]: Flushing usage events
