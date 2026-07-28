@@ -93,7 +93,11 @@ dbt Final Models
 
 ## 4. Running the Pipeline
 
-A placeholder for an orchestration layer has been added under the src directory. Once completed, the pipeline orchestrater will centralize the running and management of the pipeline, including raw data ingestion, normalization, and all dbt model processing and outputs. Until then, each Python ingestion and normalization module must be run manaually. The only dependencies to account for are that all ingestion modules must be ran prior to normalization modules. Once all manual python modules have been manually run, the dbt portion of the pipeline may be fully executed via the 'dbt build' command.
+A placeholder for an orchestration layer has been added under the src directory. Once completed, the pipeline orchestrater will centralize the running and management of the pipeline, including raw data ingestion, normalization, and all dbt model processing and outputs. 
+
+Until then, each Python ingestion or normalization module must be run manaually. All staging modules must be run before running normalization modules, there are no other run dependencies to account for. Each python module contains a single function that runs ingestion or normalization, typically located at the end of a module file. Calling this function via a CLI terminal will begin a manual run of the applicable pipeline component.  
+
+Once all manual python modules have been manually run, the dbt portion of the pipeline may be fully executed via the 'dbt build' command.
 
 ---
 
@@ -134,8 +138,8 @@ A relationship table containing:
 - tract ID
 - station ID
 - haversine distance from station to tract centroid (meters)
-- bearing from station to tract (degrees),
-- elevation difference (meters).
+- bearing from station to tract centroid (degrees)
+- elevation difference from station to tract centroid (meters)
 
 This table encodes the geospatial relationships between tracts and stations and serves as the foundation for distance taper, elevation penalty, and wind alignment used in aggregation weighting.
 
@@ -158,15 +162,15 @@ This table represents the full weighting model used to compute tract‑level hou
 
 #### "fact_lcdv2_tract_hourly"
 The final tract‑level hourly weather fact table containing weighted values for:
-- temperature,
-- humidity,
-- wind speed,
-- wind direction,
-- wind gust,
-- precipitation,
-- visibility,
-- station pressure,
-- barometric pressure.
+- temperature
+- humidity
+- wind speed
+- wind direction
+- wind gust
+- precipitation
+- visibility
+- station pressure
+- barometric pressure
 
 Each value is computed using an additive weighting model and aggregated across all relevant stations for a given tract.
 
@@ -176,7 +180,7 @@ Each value is computed using an additive weighting model and aggregated across a
 
 Additional project documentation is located in the following files:
 
-- "INGESTION.md" - Python ingestion & normalization pipeline  
+- "INGESTION.md" - Python ingestion & normalization overview  
 - "ARCHITECTURE.md" - end‑to‑end pipeline architecture
 - "DAG.md" - a review of each final models dependency graph  
 - "ALGORITHMS.md" - geospatial, weighting, and aggregation algorithms  

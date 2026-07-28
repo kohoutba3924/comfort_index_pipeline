@@ -61,9 +61,9 @@ Responsibilities:
 
 - Read normalized Parquet files.
 - Perform minimal transformations:
-  - Type casting.
-  - Column renaming.
-  - Basic structural cleanup.
+  - Type casting
+  - Column renaming
+  - Basic structural cleanup
 - Preserve the ingestion schema with minimal modification.
 
 Staging models include:

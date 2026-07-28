@@ -99,7 +99,7 @@ This lineage shows how geospatial, elevation, and wind‑based factors combine t
 ### 2.5 fact_lcdv2_tract_hourly
 
 **DAG Slice Screenshot:**  
-![fact_lcdv2_tract_hourly DAG](media/fact_ldcv2_tract_hourly_DAG.png)
+![fact_lcdv2_tract_hourly DAG](media/fact_lcdv2_tract_hourly_DAG.png)
 
 **Explanation:**  
 The DAG slice for "fact_lcdv2_tract_hourly" shows the convergence of all 16 bucket models, each responsible for computing weighted hourly weather features for a subset of tracts. Upstream dependencies include:

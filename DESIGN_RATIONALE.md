@@ -13,23 +13,23 @@ Use Python for ingestion, normalization, geospatial processing, and pipeline con
 
 ### Rationale
 Python is better suited for:
-- parsing raw external datasets,
-- geospatial operations (centroids, bounding boxes),
-- schema reconciliation,
-- timestamp manipulation,
-- file partitioning,
-- handling inconsistent raw formats,
-- parameterizing ingestion to support reruns for any U.S. state,
-- modular pipeline structure that allows new data sources to be added easily,
-- future support for full pipeline orchestration and logging.
+- parsing raw external datasets
+- geospatial operations (centroids, bounding boxes)
+- schema reconciliation
+- timestamp manipulation
+- file partitioning
+- handling inconsistent raw formats
+- parameterizing ingestion to support reruns for any U.S. state
+- modular pipeline structure that allows new data sources to be added easily
+- future support for full pipeline orchestration and logging
 
 dbt is better suited for:
-- SQL transformations,
-- dependency management,
-- lineage tracking,
-- automated testing,
-- documentation generation,
-- modular relational modeling.
+- SQL transformations
+- dependency management
+- lineage tracking
+- automated testing
+- documentation generation
+- modular relational modeling
 
 ### Outcome
 A clean boundary:
@@ -60,16 +60,16 @@ Staging models act as a stable interface between ingestion and transformation.
 
 ### Decision
 Place all meaningful transformations in the intermediate layer, including:
-- distance calculations,
-- bearing calculations,
-- elevation differences,
-- prevailing wind direction,
-- distance taper,
-- elevation penalty,
-- wind alignment,
-- raw weight,
-- normalized weight,
-- hourly LCDv2 preparation.
+- distance calculations
+- bearing calculations
+- elevation differences
+- prevailing wind direction
+- distance taper
+- elevation penalty
+- wind alignment
+- raw weight
+- normalized weight
+- hourly LCDv2 preparation
 
 ### Rationale
 - Intermediate models represent the “core logic” of the pipeline.
@@ -91,11 +91,11 @@ Partition tracts into 16 spatial buckets and compute weighted hourly weather per
 - LCDv2 is large; tract-level aggregation is computationally heavy.
 - A monolithic model would be slow and memory-intensive.
 - Bucketization:
-  - reduces memory pressure,
-  - improves runtime,
-  - enables parallel execution,
-  - isolates failures,
-  - simplifies debugging.
+  - reduces memory pressure
+  - improves runtime
+  - enables parallel execution
+  - isolates failures
+  - simplifies debugging
 
 ### Outcome
 Sixteen models:
@@ -111,10 +111,10 @@ Each processes a subset of tracts efficiently.
 
 ### Decision
 Use three weighting components:
-- distance taper,
-- elevation penalty,
-- wind alignment (bearing-based),
-combined using an additive weighting model:
+- distance taper
+- elevation penalty
+- wind alignment (bearing-based)
+- combined using an additive weighting model:
 
 raw_weight = (0.6 * distance_taper) + (0.3 * elevation_penalty) + (0.1 * wind_alignment)
 
@@ -139,10 +139,10 @@ raw_weight = (0.6 * distance_taper) + (0.3 * elevation_penalty) + (0.1 * wind_al
 
 ### Outcome
 A physically meaningful weighting system that:
-- reflects real meteorological influence ratios,
-- avoids multiplicative instability,
-- produces smoother, more interpretable weights,
-- aligns with published spatial interpolation approaches.
+- reflects real meteorological influence ratios
+- avoids multiplicative instability
+- produces smoother, more interpretable weights
+- aligns with published spatial interpolation approaches
 
 ---
 
